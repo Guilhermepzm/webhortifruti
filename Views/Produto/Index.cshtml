@@ -1,0 +1,85 @@
+﻿@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+@using Microsoft.AspNetCore.Http
+@using System.Text.Json
+
+@model List<Produto>
+
+@{
+
+    ViewData["Title"] = "Produto - Index";
+    string json = HttpContextAccessor.HttpContext.Session.GetString("user");
+    Cliente user = JsonSerializer.Deserialize<Cliente>(json);
+}
+<div style="display: flex; flex-direction: column;">
+
+    <table class="table table-hover">
+
+        <tr>
+            @if (user.NivelAcesso)
+            {
+                <th>ID</th>
+            }
+            <th>Nome</th>
+            <th>Descrição</th>
+            <th>Valor</th>
+            <th>Quantidade</th>
+        </tr>
+
+        @foreach (var prod in Model)
+        {
+            <tr>
+                @if (user.NivelAcesso)
+                {
+                    <td>@prod.IdProduto</td>
+                }
+                <td>@prod.Nome</td>
+                <td>@prod.Descricao</td>
+                <td>@prod.Valor</td>
+                <td style="display: flex; justify-content: flex-end;">
+                    @if (user.NivelAcesso)
+                    {
+                        <a style="font-weight: 700;" class="btn btn-sm btn-warning"
+                    href="/produto/update/@prod.IdProduto">Editar</a>
+                        <a style="margin-left: 10px; font-weight: 700;" class="btn btn-sm btn-danger"
+                    href="/produto/delete/@prod.IdProduto">Apagar</a>
+                    }
+                    @if (!user.NivelAcesso)
+                    {
+                        <select style="margin-right: 68%; background-color: #cac4c4;" id="quantidade@(prod.IdProduto)">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                            <option value="9">9</option>
+                            <option value="10">10</option>
+                        </select>
+                        <a id="comprar" class="btn button-green a-button" href="/carrinho/comprar/@prod.IdProduto"
+                    hidden>Comprar</a>
+                        <button onclick="comprar('/carrinho/comprar/@prod.IdProduto', '@(prod.IdProduto)')"
+                    class="btn button-green">Comprar</button>
+                    }
+                </td>
+
+            </tr>
+        }
+    </table>
+    @if (user.NivelAcesso)
+    {
+        <a style="align-self: flex-end;" class="btn button-green" href="/Produto/Create">Adcionar</a>
+    }
+</div>
+
+
+<script>
+    function comprar(href, id) {
+        var quantidade = parseInt(document.getElementById('quantidade' + id).value);
+        document.getElementById('comprar').href = href + `/${quantidade}`;
+        document.getElementById('comprar').click();
+        document.getElementById('comprar').href = href;
+
+    }
+</script>

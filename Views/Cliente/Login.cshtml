@@ -1,0 +1,33 @@
+﻿@model ClienteViewModel
+
+@if (ViewBag.Message != null)
+{
+    <div class="alert alert-danger">@ViewBag.Message</div>
+}
+
+<form asp-controller="Cliente" asp-action="Login" method="post">
+    <div style="display: flex; justify-content: center; align-items: center; margin-top: 260px;">
+        <img src="~/assets/images/logo.png" width="400px" height="200px" style="position: absolute; top: 50px;" />
+        <div style="width: 400px; height: 50%;">
+            <div class="form-group">
+                <label>Login</label>
+                <input asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Senha"></label>
+                <input asp-for="Senha" class="form-control" />
+                <span asp-validation-for="Senha"></span>
+            </div>
+
+            <button class="btn btn-block button-green">Entrar</button>
+            <div
+                style="display: flex; align-items: center; justify-content: center; margin-top: 10px; margin-bottom: 5px;">
+                <label style="font-weight: bold;">OU</label>
+            </div>
+            <a asp-area="" asp-controller="Cliente" asp-action="Create"
+                class="btn btn-block button-green a-button">Criar uma conta</a>
+        </div>
+    </div>
+</form>

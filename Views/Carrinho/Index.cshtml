@@ -1,0 +1,90 @@
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+@using Microsoft.AspNetCore.Http
+@using System.Text.Json
+
+
+@model List<Item>
+
+@{
+    string json = HttpContextAccessor.HttpContext.Session.GetString("user");
+    Cliente user = JsonSerializer.Deserialize<Cliente>(json);
+
+}
+
+<script>
+    fuction returnPedido(user, item){
+        return {}
+    }
+</script>
+
+@if (Model.Count == 0)
+{
+    <div class="container-fluid mt-100">
+        <div class="row">
+            <div class="col-md-12">
+                <div style="border-width: 1; border-color: #bfbaba; border-style: solid;" class="card">
+                    <div style="background-color: #ada8a8;" class="card-header">
+                        <h5>Carrinho</h5>
+                    </div>
+                    <div style="background-color: #cac4c4;" class="card-body cart">
+                        <div class="col-sm-12 empty-cart-cls text-center"> <img src="https://i.imgur.com/dCdflKN.png"
+                            width="130" height="130" class="img-fluid mb-4 mr-3">
+                            <h3><strong>Seu Carrinho Está Vázio</strong></h3>
+                            <h4>Peça algo agora :)</h4> <a href="/produto/index" class="btn button-green"
+                            data-abc="true">Continuar Comprando</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <div style="background-color: #cac4c4;" class="container-fluid mt-100">
+        <div style="background-color: #cac4c4;" class="row">
+            <div style="background-color: #cac4c4;" class="col-md-12">
+                <div style="border-width: 1; border-color: #bfbaba; border-style: solid;" class="card">
+                    <div style="background-color: #ada8a8;" class="card-header">
+                        <h5>Carrinho</h5>
+                    </div>
+                    <div style="background-color: #cac4c4;">
+                        <table style="background-color: #cac4c4;" class="table table-hover">
+                            <tr>
+                                <th>Nome</th>
+                                <th>Descrição</th>
+                                <th>Valor</th>
+                                <th>Quantidade</th>
+                                <th>Total</th>
+                            </tr>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>@item.Produto.Nome</td>
+                                    <td>@item.Produto.Descricao</td>
+                                    <td>@item.Produto.Valor</td>
+                                    <td>@item.Quantidade</td>
+                                    <td>@(item.Produto.Valor*item.Quantidade)</td>
+                                    <td style="display: flex; justify-content: flex-end;">
+                                        <a style="font-weight: 700;" class="btn btn-sm btn-danger"
+                                    href="/carrinho/Remover/@item.Produto.IdProduto">Remover</a>
+                                    </td>
+                                </tr>
+                            }
+                        </table>
+                    </div>
+                </div>
+                <a href="/produto/index" class="btn btn-info cart-btn-transform mt-2 float-right m-2"
+                data-abc="true">Continuar
+                    Comprando</a>
+
+                @using (Html.BeginForm("Create", "Pedido", new
+                { IdCliente = user.IdCliente, Itens = Model }
+               , FormMethod.Post))
+                {
+                    <button class="btn btn-primary cart-btn-transform mt-2 float-right" data-abc="true">Reservar Compra</button>
+                }
+            </div>
+        </div>
+    </div>
+}

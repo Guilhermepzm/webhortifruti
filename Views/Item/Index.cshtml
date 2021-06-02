@@ -1,0 +1,19 @@
+@model List<Item>
+
+<table class="table table-hover">
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.IdPedido</td>
+            <td>@item.Produto</td>
+            <td>@item.Quantidade</td>
+            <td>@item.Valor</td>
+            <td>@(item.Produto.Valor*item.Quantidade)</td>
+            <td>
+                <a class="btn btn-sm btn-danger" href="/produto/delete/@item.IdPedido">Apagar</a>
+                <a class="btn btn-sm btn-warning" href="/produto/update/@item.IdPedido">Editar</a>
+                <a class="btn btn-sm btn-info" href="/carrinho/comprar/@item.IdPedido">Comprar</a>
+            </td>
+        </tr>
+    }
+</table>
