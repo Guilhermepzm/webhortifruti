@@ -1,0 +1,76 @@
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+@using Microsoft.AspNetCore.Http
+@using System.Text.Json
+
+@model List<Pedido>
+
+@{
+
+    ViewData["Title"] = "Pedido - Index";
+    string json = HttpContextAccessor.HttpContext.Session.GetString("user");
+    Cliente user = JsonSerializer.Deserialize<Cliente>(json);
+
+    string jsonClientes = HttpContextAccessor.HttpContext.Session.GetString("Clientes");
+    List<Cliente> clientes = JsonSerializer.Deserialize<List<Cliente>>(jsonClientes);
+}
+<div style="display: flex; flex-direction: column;">
+
+    <table class="table table-hover">
+
+        <tr>
+            <th>ID</th>
+            <th>Nome do cliente</th>
+            <th>Data</th>
+            <th>Produtos</th>
+            <th>Valor Total</th>
+        </tr>
+
+        @foreach ((Pedido pedido, Int32 modelIndex) in Model.Select((value, i) => (value, i)))
+        {
+            @if (modelIndex + 1 >= Model.Count)
+            {
+            }
+            else
+            {
+                if (pedido.IdPedido == Model[modelIndex + 1].IdPedido)
+                {
+                    continue;
+                }
+            }
+            decimal valorTotal = 0;
+            <tr>
+                <td>@pedido.IdPedido</td>
+                <td>@clientes.Find(value => value.IdCliente == pedido.IdCliente).Nome</td>
+                <td>@pedido.Data</td>
+                <td>
+                    @foreach (var item in pedido.Itens)
+                    {
+                        @if (item.IdPedido == pedido.IdPedido)
+                        {
+                            <span>@item.Quantidade - @item.Produto.Nome @item.Produto.Descricao</span><br>
+                        }
+                    }
+                </td>
+                <td>
+                    @foreach ((Item item, Int32 index) in pedido.Itens.Select((value, i) => (value, i)))
+                    {
+                        @if (item.IdPedido == pedido.IdPedido)
+                        {
+                            valorTotal = valorTotal + item.Valor;
+                            @if (index + 1 >= pedido.Itens.Count)
+                            {
+                                <span>@valorTotal</span><br>
+                                continue;
+                            }
+                            @if (item.IdPedido == pedido.Itens[index + 1].IdPedido)
+                            {
+                                continue;
+                            }
+                            <span>@valorTotal</span><br>
+                        }
+                    }
+                </td>
+            </tr>
+        }
+    </table>
+</div>

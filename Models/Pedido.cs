@@ -10,7 +10,7 @@ namespace Ecommerce2021a.Models
         public int IdPedido { get; set; }
         public int IdCliente { get; set; }
         public DateTime Data { get; set; }
-        public List<Item> Itens { get; set; } = new List<Item>();
+        public List<Item> Itens { get; set; }
 
     }
 }
