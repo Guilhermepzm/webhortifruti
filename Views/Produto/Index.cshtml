@@ -22,7 +22,10 @@
             <th>Nome</th>
             <th>Descrição</th>
             <th>Valor</th>
-            <th>Quantidade</th>
+            @if (!user.NivelAcesso)
+            {
+                <th>Quantidade</th>
+            }
         </tr>
 
         @foreach (var prod in Model)

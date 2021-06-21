@@ -95,7 +95,7 @@ namespace Ecommerce2021a.Data
         {
             SqlCommand cmdCli = new SqlCommand();
             cmdCli.Connection = connectionDB;
-            cmdCli.CommandText = @"select IdCliente, Nome from Cliente";
+            cmdCli.CommandText = @"select IdCliente, Nome, Telefone from Cliente";
             List<Cliente> listaCliente = new List<Cliente>();
 
             SqlDataReader readerCli = cmdCli.ExecuteReader();
@@ -105,6 +105,7 @@ namespace Ecommerce2021a.Data
                 Cliente cli = new Cliente();
                 cli.IdCliente = (int)readerCli["IdCliente"];
                 cli.Nome = (string)readerCli["Nome"];
+                cli.Telefone = (string)readerCli["Telefone"];
 
                 listaCliente.Add(cli);
             }

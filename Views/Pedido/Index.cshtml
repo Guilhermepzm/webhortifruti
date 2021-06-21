@@ -20,6 +20,7 @@
         <tr>
             <th>ID</th>
             <th>Nome do cliente</th>
+            <th>Telefone do cliente</th>
             <th>Data</th>
             <th>Produtos</th>
             <th>Valor Total</th>
@@ -41,6 +42,7 @@
             <tr>
                 <td>@pedido.IdPedido</td>
                 <td>@clientes.Find(value => value.IdCliente == pedido.IdCliente).Nome</td>
+                <td>@clientes.Find(value => value.IdCliente == pedido.IdCliente).Telefone</td>
                 <td>@pedido.Data</td>
                 <td>
                     @foreach (var item in pedido.Itens)
